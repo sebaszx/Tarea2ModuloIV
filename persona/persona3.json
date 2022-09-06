@@ -1,0 +1,65 @@
+{
+	"identificador": "46",
+	"array": [
+		{
+			"codigo_postal_origen": "11501",
+			"codigo_postal_destino": "10456",
+			"kilometros": "9",
+			"precio_kilometro": "1000"
+		},
+		{
+			"codigo_postal_origen": "11504",
+			"codigo_postal_destino": "60101",
+			"kilometros": "9",
+			"precio_kilometro": "558"
+		},
+		{
+			"codigo_postal_origen": "11504",
+			"codigo_postal_destino": "60101",
+			"kilometros": "15",
+			"precio_kilometro": "905"
+		},
+		{
+			"codigo_postal_origen": "11504",
+			"codigo_postal_destino": "60101",
+			"kilometros": "7",
+			"precio_kilometro": "234"
+		},
+		{
+			"codigo_postal_origen": "10305",
+			"codigo_postal_destino": "10456",
+			"kilometros": "12",
+			"precio_kilometro": "507"
+		},
+		{
+			"codigo_postal_origen": "10305",
+			"codigo_postal_destino": "10456",
+			"kilometros": "11",
+			"precio_kilometro": "976"
+		},
+		{
+			"codigo_postal_origen": "10305",
+			"codigo_postal_destino": "60101",
+			"kilometros": "10",
+			"precio_kilometro": "4"
+		},
+		{
+			"codigo_postal_origen": "10305",
+			"codigo_postal_destino": "60101",
+			"kilometros": "9",
+			"precio_kilometro": "526"
+		},
+		{
+			"codigo_postal_origen": "11501",
+			"codigo_postal_destino": "60101",
+			"kilometros": "6",
+			"precio_kilometro": "482"
+		},
+		{
+			"codigo_postal_origen": "11504",
+			"codigo_postal_destino": "10101",
+			"kilometros": "4",
+			"precio_kilometro": "566"
+		}
+	]
+}
