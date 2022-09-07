@@ -7,7 +7,7 @@ spark = SparkSession.builder \
     .appName("tarea2")  \
     .getOrCreate()
 def writeJson(dataframe,nombre):
-    dataframe.write.mode('Overwrite').json("resultados/{}".format(nombre))
+    dataframe.write.mode('Overwrite').csv("resultados/{}".format(nombre))
 
 
 def read_files():
@@ -48,6 +48,24 @@ def total_viajes(dataframe):
 
     df=origendataframe.union(destinodataframe).withColumnRenamed("codigo_postal_origen", "Codigo Postal")
 
-    df=df.groupBy("Codigo Postal","tipo").count()
+    df=df.groupBy("Codigo Postal","tipo").agg(count(lit(1)).alias("Conteo"))
     writeJson(df,"total_viajes")
     return df
+
+def total_ingresos(dataframe):
+    origendataframe= dataframe.select("codigo_postal_origen","kilometros","precio_kilometro")
+    origendataframe=origendataframe.withColumn("Ingreso", origendataframe.kilometros * origendataframe.precio_kilometro)
+    origendataframe=origendataframe.withColumn("Tipo", lit("Origen"))
+
+
+    destinodataframe= dataframe.select("codigo_postal_destino","kilometros","precio_kilometro")
+    destinodataframe=destinodataframe.withColumn("Ingreso", destinodataframe.kilometros * destinodataframe.precio_kilometro)
+    destinodataframe=destinodataframe.withColumn("Tipo", lit("Destino"))
+
+
+    df=origendataframe.union(destinodataframe).withColumnRenamed("codigo_postal_origen", "Codigo Postal")
+
+    df=df.groupBy("Codigo Postal","tipo").agg(sum("Ingreso").alias("Ingreso por Codigo Postal y Tipo"))
+    writeJson(df,"total_ingresos")
+    return df
+
