@@ -1,6 +1,6 @@
 {
 	"identificador": "77",
-	"array": [
+	"viajes": [
 		{
 			"codigo_postal_origen": "11501",
 			"codigo_postal_destino": "10456",

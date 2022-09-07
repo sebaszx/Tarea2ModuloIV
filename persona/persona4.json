@@ -1,6 +1,6 @@
 {
 	"identificador": "37",
-	"array": [
+	"viajes": [
 		{
 			"codigo_postal_origen": "10305",
 			"codigo_postal_destino": "10456",

@@ -1,6 +1,6 @@
 {
 	"identificador": "98",
-	"array": [
+	"viajes": [
 		{
 			"codigo_postal_origen": "11501",
 			"codigo_postal_destino": "60101",
@@ -9,7 +9,7 @@
 		},
 		{
 			"codigo_postal_origen": "11504",
-			"codigo_postal_destino": "10456",
+			"codigo_postal_destino": "10305",
 			"kilometros": "6",
 			"precio_kilometro": "590"
 		},
