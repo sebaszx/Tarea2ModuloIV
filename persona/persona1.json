@@ -1,6 +1,6 @@
 {
 	"identificador": "78",
-	"array": [
+	"viajes": [
 		{
 			"codigo_postal_origen": "11504",
 			"codigo_postal_destino": "10101",
