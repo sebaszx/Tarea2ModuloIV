@@ -1,4 +1,4 @@
-docker cp naughty_montalcini:/src/resultados ./
+
 
 $docker_container_name =  docker ps --format '{{.Names}}'
 
