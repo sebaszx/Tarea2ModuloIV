@@ -8,6 +8,7 @@ spark = SparkSession.builder \
     .master("local") \
     .appName("tarea2")  \
     .getOrCreate()
+
 def writeJson(dataframe,nombre):
     dataframe.write.mode('Overwrite').csv("resultados/{}".format(nombre))
 
@@ -18,8 +19,8 @@ def read_files():
         StructField('identificador', StringType(), True),
         StructField('codigo_postal_origen', StringType(), True),
         StructField('codigo_postal_destino', StringType(), True),
-        StructField('kilometnanoros', StringType(), True),
-        StructField('precio_kilometro', StringType(), True)
+        StructField('kilometros', IntegerType(), True),
+        StructField('precio_kilometro', IntegerType(), True)
     ]
 )"""
 
@@ -86,7 +87,7 @@ def personaConMasIngresos(dataframe):
 def percentileN(dataframe,N,name):
   
     dataframe=dataframe.withColumn("Ingreso", dataframe.kilometros * dataframe.precio_kilometro)
-    windowSpec= Window.orderBy("Ingreso")
+    #windowSpec= Window.orderBy("Ingreso")
     #quantiles = dataframe.approxQuantile("Ingreso", [0.25, 0.5, 0.75], 0)
     quantiles = dataframe.approxQuantile("Ingreso", [N], 0)
     #print("percentil usando approxQuantile",quantiles)
@@ -138,7 +139,7 @@ def metricas(dataframe):
         ("persona_con_mas_ingresos",personaIngresos.select(personaIngresos.identificador).rdd.flatMap(lambda x: x).collect()[0]), 
         ("percentil_25", percentile_25.select(percentile_25.value).rdd.flatMap(lambda x: x).collect()[0]), 
         ("percentil_50", percentile_50.select(percentile_50.value).rdd.flatMap(lambda x: x).collect()[0]), 
-        ("percenlstil_75",  percentile_75.select(percentile_75.value).rdd.flatMap(lambda x: x).collect()[0]), 
+        ("percentil_75",  percentile_75.select(percentile_75.value).rdd.flatMap(lambda x: x).collect()[0]), 
         ("codigo_postal_origen_con_mas_ingresos",CodigoPostalOrigen.select(CodigoPostalOrigen.codigo_postal_origen).rdd.flatMap(lambda x: x).collect()[0]), 
         ("codigo_postal_destino_con_mas_ingresos", CodigoPostalDestino.select(CodigoPostalDestino.codigo_postal_destino).rdd.flatMap(lambda x: x).collect()[0]) 
     ],
@@ -148,10 +149,4 @@ def metricas(dataframe):
 
 
 
-    # key = (col("id") % 3).alias("key")
-    # value = (randn(42) + key * 10).alias("value")
-    # df = spark.range(0, 1000, 1, 1).select(key, value)
-    # df.select(
-    #     percentile_approx("value", [0.25, 0.5, 0.75], 1000000).alias("quantiles")
-    # ).printSchema()
-
+  
