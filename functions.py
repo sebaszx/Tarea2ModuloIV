@@ -32,8 +32,8 @@ def read_files():
         col("identificador"),
         col("viajes.codigo_postal_origen").cast(StringType()).alias("codigo_postal_origen"),
         col("viajes.codigo_postal_destino").cast(StringType()).alias("codigo_postal_destino"),
-        col("viajes.kilometros").cast(IntegerType()).alias("kilometros"),
-        col("viajes.precio_kilometro").cast(IntegerType()).alias("precio_kilometro")
+        col("viajes.kilometros").cast(FloatType()).alias("kilometros"),
+        col("viajes.precio_kilometro").cast(FloatType()).alias("precio_kilometro")
     )
     return multiline_df
 """
@@ -81,6 +81,7 @@ def personaConMasKilometros(dataframe):
 
 def personaConMasIngresos(dataframe):
     #dataframe.printSchema()
+   
     dataframe=dataframe.withColumn("Ingreso", dataframe.kilometros * dataframe.precio_kilometro)
     return dataframe.groupBy("identificador").agg(sum("Ingreso").alias("Metrica")).orderBy(col("Metrica").desc()).limit(1)
 
@@ -112,27 +113,30 @@ def metricas(dataframe):
     personaKilometros=personaConMasKilometros(dataframe)
     #personaKilometros.show()
     personaIngresos=personaConMasIngresos(dataframe)
+    #personaIngresos.printSchema()
     #personaIngresos.show() 
     percentile_25=percentileN(dataframe,.25,"Percentile_25")
+    #percentile_25.printSchema()
     #percentile_25.show()
     percentile_50=percentileN(dataframe,.50,"Percentile_50")
+    #percentile_50.printSchema()
     #percentile_50.show()
     percentile_75=percentileN(dataframe,.75,"Percentile_75")
-    percentile_75.printSchema()
+    #percentile_75.printSchema()
     #percentile_75.show()
     CodigoPostalOrigen=CodPostalOrigen(dataframe)
     #CodigoPostalOrigen.show()
-    CodigoPostalOrigen.printSchema()
+    #CodigoPostalOrigen.printSchema()
     CodigoPostalDestino=CodPostalDestino(dataframe)
     #CodigoPostalDestino.show()
-    CodigoPostalDestino.printSchema()
+    #CodigoPostalDestino.printSchema()
     schema=StructType(
     [
         StructField('"Tipo de Metrica"', StringType(), True),
         StructField('Valor', StringType(), True)
     ])
-    test = percentile_25.select(percentile_25.value).rdd.flatMap(lambda x: x).collect()[0]
-    print(test)
+    # test = percentile_25.select(percentile_25.value).rdd.flatMap(lambda x: x).collect()[0]
+    # print(test)
     df = spark.createDataFrame(
     [
         ("persona_con_mas_kilometros", personaKilometros.select(personaKilometros.identificador).rdd.flatMap(lambda x: x).collect()[0]),

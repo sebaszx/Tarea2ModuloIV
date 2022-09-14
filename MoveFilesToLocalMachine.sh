@@ -1,5 +1,4 @@
-
-
+#!/bin/bash
 $docker_container_name =  docker ps --format '{{.Names}}'
 
 

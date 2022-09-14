@@ -1,8 +1,8 @@
 from conftest import spark_session
 import pytest
 import datetime
-from pyspark.sql.types import (IntegerType,StringType, StructField,StructType,FloatType,DateType,LongType)
-from functions import read_files,total_viajes,total_ingresos,metricas
+from pyspark.sql.types import (IntegerType,StringType, StructField,StructType,DoubleType,FloatType,DateType,LongType)
+from functions import read_files,total_viajes,total_ingresos,metricas,personaConMasKilometros,personaConMasIngresos,percentileN,CodPostalOrigen,CodPostalDestino
 from os.path import exists
 
 def test_read_files(spark_session):
@@ -12,60 +12,60 @@ def test_read_files(spark_session):
         StructField('identificador', StringType(), True),
         StructField('codigo_postal_origen', StringType(), True),
         StructField('codigo_postal_destino', StringType(), True),
-        StructField('kilometros', IntegerType(), True),
-        StructField('precio_kilometro', IntegerType(), True)
+        StructField('kilometros', FloatType(), True),
+        StructField('precio_kilometro', FloatType(), True)
     ]
 )
-    correct_df = spark_session.createDataFrame([("98","11501","60101",   15,794),
-                                                ("98","11504","10305",10006,590),
-                                                ("98","10305","10456",   12, 57),
-                                                ("98","11501","60101",    9,371),
-                                                ("98","11501","10101",    5,483),
-                                                ("98","10305","10101",    9,628),
-                                                ("98","10305","10101",    6,581),
-                                                ("98","11504","10456",   10,671),
-                                                ("98","11501","60101",   10,236),
-                                                ("98","11504","60101",    3,436),
-                                                ("78","11504","10101",    7,884),
-                                                ("78","10305","10456",   10,645),
-                                                ("78","10305","10456",   14,430),
-                                                ("78","11501","10101",   12,157),
-                                                ("78","10305","10456",   14,557),
-                                                ("78","10305","10456",   14,968),
-                                                ("78","10305","60101",   12,203),
-                                                ("78","10305","10456",    2,145),
-                                                ("78","11504","10456",    4,737),
-                                                ("78","11504","10101",    5,567),
-                                                ("77","11501","10456",   12,265),
-                                                ("77","10305","10101",   12,108),
-                                                ("77","11504","60101",   15,140),
-                                                ("77","10305","60101",    9,543),
-                                                ("77","11501","10456",    5,431),
-                                                ("77","11504","60101",    4,533),
-                                                ("77","10305","10456",   14,404),
-                                                ("77","11501","10101",   11, 93),
-                                                ("77","11501","10456",    9,437),
-                                                ("77","10305","60101",   11,189),
-                                                ("46","11501","10456",    9,1000),
-                                                ("46","11504","60101",    9,558),
-                                                ("46","11504","60101",   15,905),
-                                                ("46","11504","60101",    7,234),
-                                                ("46","10305","10456",   12,507),
-                                                ("46","10305","10456",   11,976),
-                                                ("46","10305","60101",   10,  4),
-                                                ("46","10305","60101",    9,526),
-                                                ("46","11501","60101",    6,482),
-                                                ("46","11504","10101",    4,566),
-                                                ("37","10305","10456",   10,457),
-                                                ("37","11501","60101",    5, 78),
-                                                ("37","10305","60101",   12,684),
-                                                ("37","11504","10456",   15,133),
-                                                ("37","10305","10101",    6,321),
-                                                ("37","11504","60101",    2,675),
-                                                ("37","11504","60101",   12,887),
-                                                ("37","11504","10101",    1,522),
-                                                ("37","11504","10456",   11,343),
-                                                ("37","11504","10101",    7, 26)],schema=schema)
+    correct_df = spark_session.createDataFrame([("98","11501","60101",   15.0,794.0),
+                                                ("98","11504","10305",10006.0,590.0),
+                                                ("98","10305","10456",   12.0, 57.0),
+                                                ("98","11501","60101",    9.0,371.0),
+                                                ("98","11501","10101",    5.0,483.0),
+                                                ("98","10305","10101",    9.0,628.0),
+                                                ("98","10305","10101",    6.0,581.0),
+                                                ("98","11504","10456",   10.0,671.0),
+                                                ("98","11501","60101",   10.0,236.0),
+                                                ("98","11504","60101",    3.0,436.0),
+                                                ("78","11504","10101",    7.0,884.0),
+                                                ("78","10305","10456",   10.0,645.0),
+                                                ("78","10305","10456",   14.0,430.0),
+                                                ("78","11501","10101",   12.0,157.0),
+                                                ("78","10305","10456",   14.0,557.0),
+                                                ("78","10305","10456",   14.0,968.0),
+                                                ("78","10305","60101",   12.0,203.0),
+                                                ("78","10305","10456",    2.0,145.0),
+                                                ("78","11504","10456",    4.0,737.0),
+                                                ("78","11504","10101",    5.0,567.0),
+                                                ("77","11501","10456",   12.0,265.0),
+                                                ("77","10305","10101",   12.0,108.0),
+                                                ("77","11504","60101",   15.0,140.0),
+                                                ("77","10305","60101",    9.0,543.0),
+                                                ("77","11501","10456",    5.0,431.0),
+                                                ("77","11504","60101",    4.0,533.0),
+                                                ("77","10305","10456",   14.0,404.0),
+                                                ("77","11501","10101",   11.0, 93.0),
+                                                ("77","11501","10456",    9.0,437.0),
+                                                ("77","10305","60101",   11.0,189.0),
+                                                ("46","11501","10456",    9.0,1000.0),
+                                                ("46","11504","60101",    9.0,558.0),
+                                                ("46","11504","60101",   15.0,905.0),
+                                                ("46","11504","60101",    7.0,234.0),
+                                                ("46","10305","10456",   12.0,507.0),
+                                                ("46","10305","10456",   11.0,976.0),
+                                                ("46","10305","60101",   10.0,  4.0),
+                                                ("46","10305","60101",    9.0,526.0),
+                                                ("46","11501","60101",    6.0,482.0),
+                                                ("46","11504","10101",    4.0,566.0),
+                                                ("37","10305","10456",   10.0,457.0),
+                                                ("37","11501","60101",    5.0, 78.0),
+                                                ("37","10305","60101",   12.0,684.0),
+                                                ("37","11504","10456",   15.0,133.0),
+                                                ("37","10305","10101",    6.0,321.0),
+                                                ("37","11504","60101",    2.0,675.0),
+                                                ("37","11504","60101",   12.0,887.0),
+                                                ("37","11504","10101",    1.0,522.0),
+                                                ("37","11504","10456",   11.0,343.0),
+                                                ("37","11504","10101",    7.0, 26.0)],schema=schema)
     assert ExpectedResult.collect() == correct_df.collect()                                           
 
 def test_total_viajes(spark_session):
@@ -127,6 +127,108 @@ def test_metricas(spark_session):
                                                 ("codigo_postal_destino_con_mas_ingresos","10305")
                                                 ],schema=schema)
     assert metricass.collect() == correct_df.collect() 
+
+def test_personaConMasKilometros(spark_session):
+    datos=read_files()
+    persona= personaConMasKilometros(datos)
+    schema=StructType(
+    [
+        StructField('identificador', StringType(), True),
+        StructField('Metrica', DoubleType(), True)
+        
+    ]
+)
+    correct_df = spark_session.createDataFrame([("98",10085.0)
+                                                ],schema=schema)
+    assert persona.collect() == correct_df.collect() 
+
+
+def test_personaConMasIngresos(spark_session):
+    datos=read_files()
+    persona= personaConMasIngresos(datos)
+    schema=StructType(
+    [
+        StructField('identificador', StringType(), True),
+        StructField('Metrica', DoubleType(), True)
+        
+    ]
+)
+    correct_df = spark_session.createDataFrame([("98",5941404.0)
+                                                ],schema=schema)
+    assert persona.collect() == correct_df.collect() 
+
+def test_percentile_25(spark_session):
+    datos=read_files()
+    persona= percentileN(datos,.25,"Percentile_25")
+    schema=StructType(
+    [
+        StructField('value', StringType(), True),
+        StructField('Identificador', StringType(), True)
+        
+    ]
+)
+    correct_df = spark_session.createDataFrame([("1926.0","Percentile_25")
+                                                ],schema=schema)
+    assert persona.collect() == correct_df.collect() 
+
+def test_percentile_50(spark_session):
+    datos=read_files()
+    persona= percentileN(datos,.50,"Percentile_50")
+    schema=StructType(
+    [
+        StructField('value', StringType(), True),
+        StructField('Identificador', StringType(), True)
+        
+    ]
+)
+    correct_df = spark_session.createDataFrame([("2948.0","Percentile_50")
+                                                ],schema=schema)
+    assert persona.collect() == correct_df.collect() 
+
+def test_percentile_75(spark_session):
+    datos=read_files()
+    persona= percentileN(datos,.75,"Percentile_25")
+    schema=StructType(
+    [
+       
+        StructField('value', StringType(), True),
+        StructField('Identificador', StringType(), True)
+        
+    ]
+)
+    correct_df = spark_session.createDataFrame([("6084.0","Percentile_25")
+                                                ],schema=schema)
+    assert persona.collect() == correct_df.collect() 
+
+def test_CodPostalOrigen(spark_session):
+    datos=read_files()
+    Oringen= CodPostalOrigen(datos)
+    schema=StructType(
+    [
+       
+        StructField('codigo_postal_origen', StringType(), True),
+        StructField('Metrica', DoubleType(), True)
+        
+    ]
+)
+    correct_df = spark_session.createDataFrame([("11504",5968726.0)
+                                                ],schema=schema)
+    assert Oringen.collect() == correct_df.collect() 
+def test_CodPostalDestino(spark_session):
+    datos=read_files()
+    Oringen= CodPostalDestino(datos)
+    schema=StructType(
+    [
+       
+        StructField('codigo_postal_destino', StringType(), True),
+        StructField('Metrica', DoubleType(), True)
+        
+    ]
+)
+    correct_df = spark_session.createDataFrame([("10305",5903540.0)
+                                                ],schema=schema)
+    assert Oringen.collect() == correct_df.collect() 
+
 def test_viajes_file(spark_session):
     file_exists = exists("resultados/total_viajes")
     assert True ==file_exists

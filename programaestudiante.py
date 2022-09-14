@@ -11,7 +11,7 @@ from os.path import exists
 
 df=read_files()
 #df.printSchema()
-#df.show(50)
+df.show(50)
 
 viajes=total_viajes(df)
 #viajes.printSchema()
@@ -22,8 +22,5 @@ ingresos= total_ingresos(df)
 #ingresos.show(50)
 
 metricass = metricas(df)
-metricass.printSchema()
-metricass.show(50,Truncate=False)
 
-file_exists = exists("resultados/total_viajes")
-print(file_exists)
+
